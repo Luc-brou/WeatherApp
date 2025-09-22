@@ -10,19 +10,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var mainViewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
         setContent {
             WeatherAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    currentWeatherScreen(
+                        weather = mainViewModel.currentWeatherCondition,
+                        temperature = mainViewModel.currentWeatherTemperature,
+                        precipitation = mainViewModel.currentWeatherPrecipitation,
+                        wind = mainViewModel.currentWeatherWind,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -32,18 +40,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun currentWeatherScreen(
+    weather: String,
+    temperature: String,
+    precipitation: String,
+    wind: String,
+    modifier: Modifier = Modifier
+) {
     Text(
-        text = "Hello $name!",
+        text = "Condition: $weather\nTemperature: $temperature\nPrecipitation: $precipitation\nWind: $wind",
         modifier = modifier
     )
 }
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    WeatherAppTheme {
-        Greeting("Android")
-    }
-}
-
