@@ -8,16 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.weatherapp.R
+import com.example.weatherapp.models.Weather
 
 @Composable
-fun CurrentWeather(
-    condition: String,
-    temperature: String,
-    precipitation: String,
-    wind: String,
-    modifier: Modifier = Modifier
-) {
+fun CurrentWeather(current: Weather.Current, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -25,8 +19,8 @@ fun CurrentWeather(
         verticalArrangement = Arrangement.Top
     ) {
         Image(
-            painter = painterResource(id = R.drawable.sunny),
-            contentDescription = "Sunny weather",
+            painter = painterResource(id = current.imageRes),
+            contentDescription = current.condition,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
@@ -36,7 +30,10 @@ fun CurrentWeather(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Condition: $condition\nTemperature: $temperature\nPrecipitation: $precipitation\nWind: $wind"
+            text = "Condition: ${current.condition}\n" +
+                    "Temperature: ${current.temperature}\n" +
+                    "Precipitation: ${current.precipitationType} ${current.precipitationAmount}\n" +
+                    "Wind: ${current.windDirection}, ${current.windSpeed}"
         )
     }
 }

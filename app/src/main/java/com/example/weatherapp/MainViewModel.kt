@@ -1,74 +1,61 @@
 package com.example.weatherapp
 
 import androidx.lifecycle.ViewModel
-
-data class Weather(
-    val condition: String,
-    val temperature: String,
-    val precipitation: String,
-    val wind: String
-)
-
-data class Forecast(
-    val date: String,
-    val temperature: String,
-    val condition: String,
-    val precipitation: String,
-    val wind: String,
-    val humidity: String
-)
+import com.example.weatherapp.models.Weather
+import com.example.weatherapp.R
 
 class MainViewModel : ViewModel() {
 
-    val currentWeather: Weather
-
-    init {
-        currentWeather = Weather(
+    val weather: Weather = Weather(
+        current = Weather.Current(
+            imageRes = R.drawable.sunny,
             condition = "Sunny",
             temperature = "22°C",
-            precipitation = "None",
-            wind = "North, 22 km/h"
+            precipitationType = "None",
+            precipitationAmount = "0mm",
+            windDirection = "North",
+            windSpeed = "22 km/h"
+        ),
+        forecast = listOf(
+            Weather.Forecast(
+                date = "October 5th, 2025",
+                imageRes = R.drawable.sunny,
+                high = "15°C",
+                low = "8°C",
+                condition = "Sunny",
+                precipitationType = "Rain",
+                precipitationAmount = "20mm",
+                precipitationProbability = "50%",
+                windDirection = "North",
+                windSpeed = "20 km/h",
+                humidity = "50%"
+            ),
+            Weather.Forecast(
+                date = "October 6th, 2025",
+                imageRes = R.drawable.rainy,
+                high = "10°C",
+                low = "5°C",
+                condition = "Rainy",
+                precipitationType = "Rain",
+                precipitationAmount = "20mm",
+                precipitationProbability = "90%",
+                windDirection = "North",
+                windSpeed = "20 km/h",
+                humidity = "60%"
+            ),
+            Weather.Forecast(
+                date = "October 7th, 2025",
+                imageRes = R.drawable.thunder,
+                high = "10°C",
+                low = "4°C",
+                condition = "Thunder",
+                precipitationType = "Rain",
+                precipitationAmount = "20mm",
+                precipitationProbability = "70%",
+                windDirection = "North",
+                windSpeed = "20 km/h",
+                humidity = "70%"
+            )
         )
-    }
-
-
-    val dailyForecast1: Forecast
-
-    init {
-        dailyForecast1 = Forecast(
-            date = "October 5th, 2025",
-            temperature = "15 degrees celcius",
-            condition = "Sunny",
-            precipitation = "Rain, 20mm, 50% probability",
-            wind = "20km/h North",
-            humidity = "50% humidity"
-        )
-    }
-
-    val dailyForecast2: Forecast
-
-    init {
-        dailyForecast2 = Forecast(
-            date = "October 6th, 2025",
-            temperature = "10 degrees celcius",
-            condition = "Rainy",
-            precipitation = "Rain, 20mm, 90% probability",
-            wind = "20km/h North",
-            humidity = "60% humidity"
-        )
-    }
-
-    val dailyForecast3: Forecast
-
-    init {
-        dailyForecast3 = Forecast(
-            date = "October 7th, 2025",
-            temperature = "10 degrees celcius",
-            condition = "Thunder",
-            precipitation = "Rain, 20mm, 70% probability of thunder",
-            wind = "20km/h North",
-            humidity = "70% humidity"
-        )
-    }
-
+    )
 }

@@ -61,36 +61,10 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable("current") {
-                            CurrentWeather(
-                                condition = mainViewModel.currentWeather.condition,
-                                temperature = mainViewModel.currentWeather.temperature,
-                                precipitation = mainViewModel.currentWeather.precipitation,
-                                wind = mainViewModel.currentWeather.wind
-                            )
+                            CurrentWeather(current = mainViewModel.weather.current)
                         }
                         composable("forecast") {
-                            DailyForecast(
-                                date1 = mainViewModel.dailyForecast1.date,
-                                tempInfo1 = mainViewModel.dailyForecast1.temperature,
-                                conditionInfo1 = mainViewModel.dailyForecast1.condition,
-                                precipitationInfo1 = mainViewModel.dailyForecast1.precipitation,
-                                windInfo1 = mainViewModel.dailyForecast1.wind,
-                                humidity1 = mainViewModel.dailyForecast1.humidity,
-
-                                date2 = mainViewModel.dailyForecast2.date,
-                                tempInfo2 = mainViewModel.dailyForecast2.temperature,
-                                conditionInfo2 = mainViewModel.dailyForecast2.condition,
-                                precipitationInfo2 = mainViewModel.dailyForecast2.precipitation,
-                                windInfo2 = mainViewModel.dailyForecast2.wind,
-                                humidity2 = mainViewModel.dailyForecast2.humidity,
-
-                                date3 = mainViewModel.dailyForecast3.date,
-                                tempInfo3 = mainViewModel.dailyForecast3.temperature,
-                                conditionInfo3 = mainViewModel.dailyForecast3.condition,
-                                precipitationInfo3 = mainViewModel.dailyForecast3.precipitation,
-                                windInfo3 = mainViewModel.dailyForecast3.wind,
-                                humidity3 = mainViewModel.dailyForecast3.humidity
-                            )
+                            DailyForecast(forecasts = mainViewModel.weather.forecast)
                         }
                     }
                 }

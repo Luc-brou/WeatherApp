@@ -10,33 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.weatherapp.R
+import com.example.weatherapp.models.Weather
 
 @Composable
-fun DailyForecast(
-    date1: String,
-    tempInfo1: String,
-    conditionInfo1: String,
-    precipitationInfo1: String,
-    windInfo1: String,
-    humidity1: String,
-
-    date2: String,
-    tempInfo2: String,
-    conditionInfo2: String,
-    precipitationInfo2: String,
-    windInfo2: String,
-    humidity2: String,
-
-    date3: String,
-    tempInfo3: String,
-    conditionInfo3: String,
-    precipitationInfo3: String,
-    windInfo3: String,
-    humidity3: String,
-
-    modifier: Modifier = Modifier
-) {
+fun DailyForecast(forecasts: List<Weather.Forecast>, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -44,75 +21,30 @@ fun DailyForecast(
             .padding(16.dp),
         verticalArrangement = Arrangement.Top
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 32.dp)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.sunny),
-                contentDescription = "Sunny weather",
-                contentScale = ContentScale.Fit,
+        forecasts.forEach { forecast ->
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Date: $date1\n" +
-                        "Temperature Info: $tempInfo1\n" +
-                        "Condition: $conditionInfo1\n" +
-                        "Precipitation Info: $precipitationInfo1\n" +
-                        "Wind Info: $windInfo1\n" +
-                        "Humidity: $humidity1\n"
-            )
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 32.dp)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.rainy),
-                contentDescription = "Rainy weather",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Date: $date2\n" +
-                        "Temperature Info: $tempInfo2\n" +
-                        "Condition: $conditionInfo2\n" +
-                        "Precipitation Info: $precipitationInfo2\n" +
-                        "Wind Info: $windInfo2\n" +
-                        "Humidity: $humidity2\n"
-            )
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.thunder),
-                contentDescription = "Thunder weather",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Date: $date3\n" +
-                        "Temperature Info: $tempInfo3\n" +
-                        "Condition: $conditionInfo3\n" +
-                        "Precipitation Info: $precipitationInfo3\n" +
-                        "Wind Info: $windInfo3\n" +
-                        "Humidity: $humidity3\n"
-            )
+                    .padding(bottom = 32.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = forecast.imageRes),
+                    contentDescription = forecast.condition,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Date: ${forecast.date}\n" +
+                            "High: ${forecast.high}, Low: ${forecast.low}\n" +
+                            "Condition: ${forecast.condition}\n" +
+                            "Precipitation: ${forecast.precipitationType}, ${forecast.precipitationAmount}, ${forecast.precipitationProbability}\n" +
+                            "Wind: ${forecast.windDirection}, ${forecast.windSpeed}\n" +
+                            "Humidity: ${forecast.humidity}\n"
+                )
+            }
         }
     }
 }
