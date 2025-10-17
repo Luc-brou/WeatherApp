@@ -1,3 +1,4 @@
+//http://api.weatherapi.com/v1/forecast.json?key=453d2381a82d4521ac5174748251510&q=Halifax&days=3&aqi=no&alerts=no//
 package com.example.weatherapp
 
 import android.annotation.SuppressLint
