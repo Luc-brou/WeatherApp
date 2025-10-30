@@ -15,33 +15,33 @@ data class Weather(
 
     data class Current(
         @SerializedName("temp_c") val currentTemp: Double,
-        val condition: condition,
-        @SerializedName("precip_mm") val current_precipitation: Double,
+        val condition: Condition,
+        @SerializedName("precip_mm") val currentPrecipitation: Double,
         @SerializedName("wind_kph") val wind: Double,
-        @SerializedName("wind_dir") val wind_direction: String,
+        @SerializedName("wind_dir") val windDirection: String,
         val humidity: Int
     )
 
     data class Forecast(
-        @SerializedName("forecastday") val forecastDays: List<forecastday>
+        @SerializedName("forecastday") val forecastDays: List<ForecastDay>
     )
 
-    data class forecastday(
+    data class ForecastDay(
         val date: String,
-        val day: day
+        val day: Day
     )
 
-    data class day(
-        val maxtemp_C: Double,
-        val mintemp_C: Double,
-        val condition: condition,
-        val totalprecip_Mm: Double,
-        val daily_chance_of_rain: Int,
-        val maxwind_kph: Double,
-        val avghumidity: Int
+    data class Day(
+        @SerializedName("maxtemp_c") val maxTemp: Double,
+        @SerializedName("mintemp_c") val minTemp: Double,
+        val condition: Condition,
+        @SerializedName("totalprecip_mm") val totalPrecipMm: Double,
+        @SerializedName("daily_chance_of_rain") val dailyChanceOfRain: Int,
+        @SerializedName("maxwind_kph") val maxWind: Double,
+        @SerializedName("avghumidity") val avgHumidity: Int
     )
 
-    data class condition(
+    data class Condition(
         val text: String,
         val icon: String
     )
