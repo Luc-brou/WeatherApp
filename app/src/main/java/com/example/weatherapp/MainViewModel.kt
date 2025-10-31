@@ -1,7 +1,10 @@
 package com.example.weatherapp
 
+import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
 import com.example.weatherapp.models.Weather
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,13 +38,14 @@ class MainViewModel : ViewModel() {
 
     private val api: WeatherApiService = retrofit.create(WeatherApiService::class.java)
 
-    fun fetchWeather(apiKey: String, location: String = "Halifax", days: Int = 3) {
+    @OptIn(UnstableApi::class)
+    fun fetchWeather(apiKey: String, location: String, days: Int = 3) {
         viewModelScope.launch {
             try {
                 val response = api.getForecast(apiKey, location, days)
                 _weather.value = response
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("Weather", "Error fetching weather", e)
             }
         }
     }

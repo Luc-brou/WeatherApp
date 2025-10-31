@@ -30,11 +30,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             val weatherState by mainViewModel.weather.collectAsState()
 
-            LaunchedEffect(Unit) {
-                mainViewModel.fetchWeather("c585d97973f5434abfb03413253010", "Halifax", 3)
-            }
-
             WeatherAppTheme {
+                // Fetch Halifax weather immediately
+                mainViewModel.fetchWeather("c585d97973f5434abfb03413253010", "Halifax", 3)
+
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
@@ -76,9 +75,11 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("current") {
                             weatherState?.let { CurrentWeather(current = it.current) }
+                                ?: Text("Loading weather…")
                         }
                         composable("forecast") {
                             weatherState?.let { DailyForecast(forecasts = it.forecast.forecastDays) }
+                                ?: Text("Loading forecast…")
                         }
                     }
                 }
@@ -95,7 +96,7 @@ class MainActivity : ComponentActivity() {
                 titleContentColor = MaterialTheme.colorScheme.primary,
             ),
             title = {
-                Text("Halifax, Nova Scotia")
+                Text("WeatherApp")
             }
         )
     }
