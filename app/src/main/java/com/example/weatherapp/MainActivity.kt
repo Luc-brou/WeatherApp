@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -42,10 +43,10 @@ class MainActivity : ComponentActivity() {
             val weatherState by mainViewModel.weather.collectAsState()
 
             WeatherAppTheme {
-                // Fetch Halifax weather immediately
-                mainViewModel.fetchWeather("c585d97973f5434abfb03413253010", "Halifax", 3)
-                //Display location perms popup
-                GetLocation()
+                // Request location and fetch weather when ready
+                GetLocation { coords ->
+                    mainViewModel.fetchWeather("c585d97973f5434abfb03413253010", coords, 3)
+                }
 
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -87,12 +88,26 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable("current") {
-                            weatherState?.let { CurrentWeather(current = it.current) }
-                                ?: Text("Loading weather…")
+                            weatherState?.let { weather ->
+                                Column {
+                                    Text(
+                                        text = "${weather.location.name}, ${weather.location.region}",
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                    CurrentWeather(current = weather.current)
+                                }
+                            } ?: Text("Loading weather…")
                         }
                         composable("forecast") {
-                            weatherState?.let { DailyForecast(forecasts = it.forecast.forecastDays) }
-                                ?: Text("Loading forecast…")
+                            weatherState?.let { weather ->
+                                Column {
+                                    Text(
+                                        text = "${weather.location.name}, ${weather.location.region}",
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                    DailyForecast(forecasts = weather.forecast.forecastDays)
+                                }
+                            } ?: Text("Loading forecast…")
                         }
                     }
                 }
@@ -116,47 +131,35 @@ class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
-    fun GetLocation() {
-        // Remember the permission state(asking for Fine location)
+    fun GetLocation(onCoordinatesReady: (String) -> Unit) {
         val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
 
         if (permissionState.status.isGranted) {
-            Log.i("TESTING", "Hurray, permission granted!")
-
-            // Get Location
             val currentContext = LocalContext.current
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(currentContext)
 
             if (ContextCompat.checkSelfPermission(
                     currentContext,
                     Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED)
-            {
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 val cancellationTokenSource = CancellationTokenSource()
 
-                Log.i("TESTING", "Requesting location...")
-
-                fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationTokenSource.token)
-                    .addOnSuccessListener { location ->
-                        if (location != null) {
-                            val lat = location.latitude.toString()
-                            val lng = location.longitude.toString()
-
-                            Log.i("TESTING", "Success: $lat $lng")
-
-                            val coordinates = "$lat,$lng"
-
-                            // call a function, like in View Model, to do something with location...
-                        }
-                        else {
-                            Log.i("TESTING", "Problem encountered: Location returned null")
-                        }
+                fusedLocationClient.getCurrentLocation(
+                    Priority.PRIORITY_HIGH_ACCURACY,
+                    cancellationTokenSource.token
+                ).addOnSuccessListener { location ->
+                    if (location != null) {
+                        val coords = "${location.latitude},${location.longitude}"
+                        Log.i("TESTING", "Success: $coords")
+                        onCoordinatesReady(coords)
+                    } else {
+                        Log.i("TESTING", "Problem encountered: Location returned null")
                     }
+                }
             }
-        }
-        else {
-            // Run a side-effect (coroutine) to get permission. The permission popup.
-            LaunchedEffect(permissionState){
+        } else {
+            LaunchedEffect(permissionState) {
                 permissionState.launchPermissionRequest()
             }
         }
