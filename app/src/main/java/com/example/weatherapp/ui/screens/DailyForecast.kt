@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.weatherapp.models.Weather
 
 @Composable
@@ -24,6 +25,20 @@ fun DailyForecast(forecasts: List<Weather.ForecastDay>, modifier: Modifier = Mod
                     .fillMaxWidth()
                     .padding(bottom = 32.dp)
             ) {
+
+                // The API icons start with "//", so this prepends "https:"
+                val iconUrl = if (forecast.day.condition.icon.startsWith("//")) {
+                    "https:${forecast.day.condition.icon}"
+                } else {
+                    forecast.day.condition.icon
+                }
+
+                AsyncImage(
+                    model = iconUrl,
+                    contentDescription = forecast.day.condition.text,
+                    modifier = Modifier.size(64.dp)
+                )
+
                 Text( //more detailed version of current weather screen, but for 3 days.
                     text = "Date: ${forecast.date}\n" +
                             "High: ${forecast.day.maxTemp}°C, Low: ${forecast.day.minTemp}°C\n" +

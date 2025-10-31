@@ -39,7 +39,7 @@ class MainViewModel : ViewModel() {
     private val api: WeatherApiService = retrofit.create(WeatherApiService::class.java) //retrofit service creation
 
     @OptIn(UnstableApi::class)
-    fun fetchWeather(apiKey: String, location: String, days: Int = 3) {
+    fun fetchWeather(apiKey: String, location: String, days: Int = 7) {
         viewModelScope.launch {
             try {
                 val response = api.getForecast(apiKey, location, days)
