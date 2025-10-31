@@ -17,7 +17,7 @@ fun CurrentWeather(current: Weather.Current, modifier: Modifier = Modifier) {
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
+        Text( //here is the text that displays on the app. based on JSON data.
             text = "Condition: ${current.condition.text}\n" +
                     "Temperature: ${current.currentTemp}°C\n" +
                     "Precipitation: ${current.currentPrecipitation} mm\n" +

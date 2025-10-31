@@ -21,13 +21,13 @@ class MainViewModel : ViewModel() {
     val weather: StateFlow<Weather?> = _weather.asStateFlow()
 
     private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("https://api.weatherapi.com/")
+        .baseUrl("https://api.weatherapi.com/") //extra URL info is appended from MainActivity
         .addConverterFactory(GsonConverterFactory.create())
-        .build()
+        .build() //once appended it gets the full URL to fetch data from.
 
     interface WeatherApiService {
         @GET("v1/forecast.json")
-        suspend fun getForecast(
+        suspend fun getForecast( //fetch data parameters
             @Query("key") apiKey: String,
             @Query("q") location: String,
             @Query("days") days: Int,
@@ -36,7 +36,7 @@ class MainViewModel : ViewModel() {
         ): Weather
     }
 
-    private val api: WeatherApiService = retrofit.create(WeatherApiService::class.java)
+    private val api: WeatherApiService = retrofit.create(WeatherApiService::class.java) //retrofit service creation
 
     @OptIn(UnstableApi::class)
     fun fetchWeather(apiKey: String, location: String, days: Int = 3) {
@@ -44,8 +44,8 @@ class MainViewModel : ViewModel() {
             try {
                 val response = api.getForecast(apiKey, location, days)
                 _weather.value = response
-            } catch (e: Exception) {
-                Log.e("Weather", "Error fetching weather", e)
+            } catch (e: Exception) { //outputs in logcat
+                Log.e("Weather", "Error fetching weather", e) //error catching if data doesnt load
             }
         }
     }

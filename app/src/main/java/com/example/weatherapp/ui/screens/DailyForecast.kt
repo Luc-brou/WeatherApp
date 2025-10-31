@@ -24,7 +24,7 @@ fun DailyForecast(forecasts: List<Weather.ForecastDay>, modifier: Modifier = Mod
                     .fillMaxWidth()
                     .padding(bottom = 32.dp)
             ) {
-                Text(
+                Text( //more detailed version of current weather screen, but for 3 days.
                     text = "Date: ${forecast.date}\n" +
                             "High: ${forecast.day.maxTemp}°C, Low: ${forecast.day.minTemp}°C\n" +
                             "Condition: ${forecast.day.condition.text}\n" +
