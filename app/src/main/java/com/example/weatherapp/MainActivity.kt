@@ -1,7 +1,10 @@
 package com.example.weatherapp
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -13,10 +16,18 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.*
 import com.example.weatherapp.ui.screens.CurrentWeather
 import com.example.weatherapp.ui.screens.DailyForecast
 import com.example.weatherapp.ui.theme.WeatherAppTheme
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
 
 class MainActivity : ComponentActivity() {
 
@@ -33,6 +44,8 @@ class MainActivity : ComponentActivity() {
             WeatherAppTheme {
                 // Fetch Halifax weather immediately
                 mainViewModel.fetchWeather("c585d97973f5434abfb03413253010", "Halifax", 3)
+                //Display location perms popup
+                GetLocation()
 
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -99,5 +112,53 @@ class MainActivity : ComponentActivity() {
                 Text("WeatherApp")
             }
         )
+    }
+
+    @OptIn(ExperimentalPermissionsApi::class)
+    @Composable
+    fun GetLocation() {
+        // Remember the permission state(asking for Fine location)
+        val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
+
+        if (permissionState.status.isGranted) {
+            Log.i("TESTING", "Hurray, permission granted!")
+
+            // Get Location
+            val currentContext = LocalContext.current
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(currentContext)
+
+            if (ContextCompat.checkSelfPermission(
+                    currentContext,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED)
+            {
+                val cancellationTokenSource = CancellationTokenSource()
+
+                Log.i("TESTING", "Requesting location...")
+
+                fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cancellationTokenSource.token)
+                    .addOnSuccessListener { location ->
+                        if (location != null) {
+                            val lat = location.latitude.toString()
+                            val lng = location.longitude.toString()
+
+                            Log.i("TESTING", "Success: $lat $lng")
+
+                            val coordinates = "$lat,$lng"
+
+                            // call a function, like in View Model, to do something with location...
+                        }
+                        else {
+                            Log.i("TESTING", "Problem encountered: Location returned null")
+                        }
+                    }
+            }
+        }
+        else {
+            // Run a side-effect (coroutine) to get permission. The permission popup.
+            LaunchedEffect(permissionState){
+                permissionState.launchPermissionRequest()
+            }
+        }
     }
 }
