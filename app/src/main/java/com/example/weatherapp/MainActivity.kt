@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
             WeatherAppTheme {
                 // Requests location and fetches weather JSON data
                 GetLocation { coords ->
-                    mainViewModel.fetchWeather("c585d97973f5434abfb03413253010", coords, 7) //these fetch paramaters are used in mainactivity
+                    mainViewModel.fetchWeather("c585d97973f5434abfb03413253010", coords, 7)
                 }
 
                 val navController = rememberNavController()
@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
                     topBar = { TopBarContent() },
                     bottomBar = {
                         NavigationBar {
-                            NavigationBarItem( //routing based on bottom bar buttons
+                            NavigationBarItem(
                                 selected = currentRoute == "current",
                                 onClick = {
                                     navController.navigate("current") {
@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 icon = { Icon(Icons.Default.Home, contentDescription = "Current Weather") },
-                                label = { Text("Current Weather") } //current weather button
+                                label = { Text("Current Weather") }
                             )
                             NavigationBarItem(
                                 selected = currentRoute == "forecast",
@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 icon = { Icon(Icons.Default.Info, contentDescription = "Daily Forecast") },
-                                label = { Text("Daily Forecast") } //forecast button
+                                label = { Text("Daily Forecast") }
                             )
                         }
                     }
@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
                         composable("current") {
                             weatherState?.let { weather ->
                                 Column {
-                                    Text( //text for displaying location near top of screen
+                                    Text(
                                         text = "${weather.location.name}, ${weather.location.region}",
                                         style = MaterialTheme.typography.titleMedium
                                     )
@@ -101,13 +101,13 @@ class MainActivity : ComponentActivity() {
                         composable("forecast") {
                             weatherState?.let { weather ->
                                 Column {
-                                    Text( //same here
+                                    Text(
                                         text = "${weather.location.name}, ${weather.location.region}",
                                         style = MaterialTheme.typography.titleMedium
                                     )
                                     DailyForecast(forecasts = weather.forecast.forecastDays)
                                 }
-                            } ?: Text("Loading forecast…") //displays when loading forecast if data isnt loaded yet
+                            } ?: Text("Loading forecast…")
                         }
                     }
                 }
@@ -120,19 +120,19 @@ class MainActivity : ComponentActivity() {
     fun TopBarContent() {
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                titleContentColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary, // fixed contrast
             ),
             title = {
-                Text("WeatherApp")  //top bar content
+                Text("WeatherApp")
             }
         )
     }
 
-    @OptIn(ExperimentalPermissionsApi::class) //location popup code block
+    @OptIn(ExperimentalPermissionsApi::class)
     @Composable
     fun GetLocation(onCoordinatesReady: (String) -> Unit) {
-        val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION) //asks user for access to fine or coarse location
+        val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
 
         if (permissionState.status.isGranted) {
             val currentContext = LocalContext.current
@@ -154,7 +154,7 @@ class MainActivity : ComponentActivity() {
                         Log.i("TESTING", "Success: $coords")
                         onCoordinatesReady(coords)
                     } else {
-                        Log.i("TESTING", "Problem encountered: Location returned null") //error block
+                        Log.i("TESTING", "Problem encountered: Location returned null")
                     }
                 }
             }
