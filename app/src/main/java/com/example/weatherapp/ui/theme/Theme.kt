@@ -13,30 +13,30 @@ import androidx.compose.ui.platform.LocalContext
 
 // Dark theme colors
 private val DarkColorScheme = darkColorScheme(
-    primary = CyanGlow,
-    secondary = PacificBlue,
-    tertiary = DustyGrape,
-    background = SpaceIndigo,
-    surface = DarkCyan,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color.White,
-    onSurface = Color.White
+    primary = BluePrimary,        // strong blue for top bar/buttons
+    secondary = Secondary,    // lighter blue accents
+    tertiary = BlueAccent,        // pastel blue highlights
+    background = Color(0xFF121212), // dark background
+    surface = Color(0xFF1E1E1E),    // dark surfaces
+    onPrimary = Color.White,      // text/icons on blue
+    onSecondary = Color.Black,    // text/icons on lighter blue
+    onTertiary = Color.Black,
+    onBackground = Color.White,   // text on dark background
+    onSurface = Color.White       // text on dark surfaces
 )
 
 // Light theme colors
 private val LightColorScheme = lightColorScheme(
-    primary = DarkCyan,
-    secondary = SpaceIndigo,
-    tertiary = DustyGrape,
-    background = Color(0xFFFFFBFE),
-    surface = CyanGlow,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F)
+    primary = BluePrimary,        // strong blue for top bar/buttons
+    secondary = Secondary,    // lighter blue accents
+    tertiary = BlueAccent,        // pastel blue highlights
+    background = WhiteBackground, // clean white background
+    surface = LightGreySurface,   // subtle grey surfaces
+    onPrimary = Color.White,      // text/icons on blue
+    onSecondary = DarkText,       // text/icons on lighter blue
+    onTertiary = DarkText,
+    onBackground = DarkText,      // main text color
+    onSurface = DarkText          // text on surfaces
 )
 
 @Composable

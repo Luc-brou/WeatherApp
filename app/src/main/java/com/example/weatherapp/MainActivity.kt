@@ -18,11 +18,17 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.example.weatherapp.ui.screens.CurrentWeather
 import com.example.weatherapp.ui.screens.DailyForecast
 import com.example.weatherapp.ui.theme.WeatherAppTheme
+import com.example.weatherapp.ui.theme.BluePrimary
+import com.example.weatherapp.ui.theme.DarkText
+import com.example.weatherapp.ui.theme.Secondary
+import com.example.weatherapp.ui.theme.WhiteBackground
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -54,33 +60,9 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
+                    containerColor = WhiteBackground, // body background
                     topBar = { TopBarContent() },
-                    bottomBar = {
-                        NavigationBar {
-                            NavigationBarItem(
-                                selected = currentRoute == "current",
-                                onClick = {
-                                    navController.navigate("current") {
-                                        launchSingleTop = true
-                                        popUpTo(navController.graph.startDestinationId)
-                                    }
-                                },
-                                icon = { Icon(Icons.Default.Home, contentDescription = "Current Weather") },
-                                label = { Text("Current Weather") }
-                            )
-                            NavigationBarItem(
-                                selected = currentRoute == "forecast",
-                                onClick = {
-                                    navController.navigate("forecast") {
-                                        launchSingleTop = true
-                                        popUpTo(navController.graph.startDestinationId)
-                                    }
-                                },
-                                icon = { Icon(Icons.Default.Info, contentDescription = "Daily Forecast") },
-                                label = { Text("Daily Forecast") }
-                            )
-                        }
-                    }
+                    bottomBar = { BottomBarContent(navController, currentRoute) }
                 ) { innerPadding ->
                     NavHost(
                         navController = navController,
@@ -120,13 +102,44 @@ class MainActivity : ComponentActivity() {
     fun TopBarContent() {
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                titleContentColor = MaterialTheme.colorScheme.onPrimary, // fixed contrast
+                containerColor = BluePrimary, // top bar background
+                titleContentColor = DarkText// white text on blue
             ),
             title = {
                 Text("WeatherApp")
             }
         )
+    }
+
+    @Composable
+    fun BottomBarContent(navController: NavHostController, currentRoute: String?) {
+        NavigationBar(
+            containerColor = Secondary, // bottom bar background
+            contentColor = Color.White       // white icons/labels on blue
+        ) {
+            NavigationBarItem(
+                selected = currentRoute == "current",
+                onClick = {
+                    navController.navigate("current") {
+                        launchSingleTop = true
+                        popUpTo(navController.graph.startDestinationId)
+                    }
+                },
+                icon = { Icon(Icons.Default.Home, contentDescription = "Current Weather") },
+                label = { Text("Current Weather") }
+            )
+            NavigationBarItem(
+                selected = currentRoute == "forecast",
+                onClick = {
+                    navController.navigate("forecast") {
+                        launchSingleTop = true
+                        popUpTo(navController.graph.startDestinationId)
+                    }
+                },
+                icon = { Icon(Icons.Default.Info, contentDescription = "Daily Forecast") },
+                label = { Text("Daily Forecast") }
+            )
+        }
     }
 
     @OptIn(ExperimentalPermissionsApi::class)
