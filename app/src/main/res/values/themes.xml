@@ -2,23 +2,17 @@
 <resources>
 
     <!-- Normal app theme -->
-    <style name="Theme.WeatherApp" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Use your custom colors -->
-        <item name="colorPrimary">@color/BluePrimary</item>
-        <item name="colorSecondary">@color/BlueSecondary</item>
+    <style name="Theme.WeatherApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- System bar overrides -->
         <item name="android:statusBarColor">@color/BluePrimary</item>
         <item name="android:navigationBarColor">@color/WhiteBackground</item>
     </style>
 
     <!-- Splash screen theme -->
     <style name="Theme.WeatherApp.Splash" parent="Theme.SplashScreen">
-        <!-- App icon shown in splash -->
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
-        <!-- Background color for splash -->
         <item name="windowSplashScreenBackground">@color/BluePrimary</item>
-        <!-- Optional animation duration -->
         <item name="windowSplashScreenAnimationDuration">300</item>
-        <!-- After splash, switch to normal app theme -->
         <item name="postSplashScreenTheme">@style/Theme.WeatherApp</item>
     </style>
 
